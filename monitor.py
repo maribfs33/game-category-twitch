@@ -60,8 +60,9 @@ def main():
     state = read_state()
 
     if current["is_live"]:
-        if state.get("last_game") != current["game_name"]:
+       if state.get("last_game") != current["game_name"]:
             payload = {
+                "content": "<@YOUR_DISCORD_USER_ID>",
                 "embeds": [{
                     "title": f"🎮 {current['display_name']} changed category!",
                     "description": f"**New Category:** {current['game_name']}\n**Stream Title:** {current['title']}",
