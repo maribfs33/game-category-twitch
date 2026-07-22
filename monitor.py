@@ -39,13 +39,16 @@ def get_stream_info(token):
     return {"is_live": False, "game_name": "", "title": "", "display_name": STREAMER_NAME}
 
 def read_state():
+    default_state = {"last_game": None, "is_live": False}
     if os.path.exists(STATE_FILE):
         try:
             with open(STATE_FILE, "r") as f:
-                return json.load(f)
+                data = json.load(f)
+                if isinstance(data, dict):
+                    default_state.update(data)
         except Exception:
             pass
-    return {"last_game": None, "is_live": False}
+    return default_state
 
 def write_state(state):
     with open(STATE_FILE, "w") as f:
@@ -57,7 +60,7 @@ def main():
     state = read_state()
 
     if current["is_live"]:
-        if state["last_game"] != current["game_name"]:
+        if state.get("last_game") != current["game_name"]:
             payload = {
                 "embeds": [{
                     "title": f"🎮 {current['display_name']} changed category!",
